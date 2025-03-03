@@ -1,6 +1,6 @@
 import Svg, { Defs, RadialGradient, Rect, Stop } from "react-native-svg";
 import { Dimensions, StyleSheet } from "react-native";
-import { useEffect } from "react";
+import { useEffect, useId } from "react";
 import { useSharedValue, withTiming } from "react-native-reanimated";
 
 const { width } = Dimensions.get("window");
@@ -54,19 +54,17 @@ export default function Light({ location, size, color }) {
 
   //, { opacity }
 
+  const id = useId();
+
   return (
-    <Svg
-      width={size}
-      height={size}
-      style={[styles.light, position]}
-    >
+    <Svg width={size} height={size} style={[styles.light, position]}>
       <Defs>
-        <RadialGradient id="grad" cx="50%" cy="50%" r="50%">
+        <RadialGradient id={id} cx="50%" cy="50%" r="50%">
           <Stop offset="0%" stopColor={`${color}`} stopOpacity="0.5" />
           <Stop offset="100%" stopColor="rgba(255, 0, 0, 0)" stopOpacity="0" />
         </RadialGradient>
       </Defs>
-      <Rect width="100%" height="100%" fill="url(#grad)" />
+      <Rect width="100%" height="100%" fill={`url(#${id})`} />
     </Svg>
   );
 }
