@@ -5,42 +5,42 @@ import { useSharedValue, withTiming } from "react-native-reanimated";
 
 const { width } = Dimensions.get("window");
 
-export default function Light(props) {
+export default function Light({ location, size, color }) {
   let position = {};
 
-  switch (props.location) {
+  switch (location) {
     case "top-right": {
       position = {
-        top: -props.size / 2,
-        right: -props.size / 2,
+        top: -size / 2,
+        right: -size / 2,
       };
       break;
     }
     case "top-left": {
       position = {
-        top: -props.size / 2,
-        left: -props.size / 2,
+        top: -size / 2,
+        left: -size / 2,
       };
       break;
     }
     case "bottom-right": {
       position = {
-        right: -props.size / 2,
-        bottom: -props.size / 2,
+        right: -size / 2,
+        bottom: -size / 2,
       };
       break;
     }
     case "bottom-left": {
       position = {
-        bottom: -props.size / 2,
-        left: -props.size / 2,
+        bottom: -size / 2,
+        left: -size / 2,
       };
       break;
     }
     case "center": {
       position = {
-        top: width / 2 - props.size / 2,
-        left: width / 2 - props.size / 2,
+        top: width / 2 - size / 2,
+        left: width / 2 - size / 2,
       };
       break;
     }
@@ -56,13 +56,13 @@ export default function Light(props) {
 
   return (
     <Svg
-      width={props.size}
-      height={props.size}
+      width={size}
+      height={size}
       style={[styles.light, position]}
     >
       <Defs>
         <RadialGradient id="grad" cx="50%" cy="50%" r="50%">
-          <Stop offset="0%" stopColor={`${props.color}`} stopOpacity="0.5" />
+          <Stop offset="0%" stopColor={`${color}`} stopOpacity="0.5" />
           <Stop offset="100%" stopColor="rgba(255, 0, 0, 0)" stopOpacity="0" />
         </RadialGradient>
       </Defs>

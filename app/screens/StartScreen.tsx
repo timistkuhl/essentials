@@ -1,3 +1,4 @@
+import AppDrawer from "@/components/AppDrawer";
 import Light from "@/components/Light";
 import React from "react";
 import { useEffect, useState } from "react";
@@ -35,13 +36,9 @@ export default function StartScreen() {
         size={LIGHT_SIZE}
         location={"bottom-left"}
       />
-      
+
       <View style={styles.main}>
-        <Text style={styles.title} onPress={() => setCount(count + 1)}>
-          {count}
-        </Text>
-        <Text style={styles.subtitle}>{text}</Text>
-        <Button title="Hello" onPress={() => alert("Hello")} />
+        <AppDrawer />
       </View>
     </SafeAreaView>
   );
@@ -59,14 +56,5 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     padding: 24,
     zIndex: 1,
-  },
-  title: {
-    color: "white",
-    fontSize: 64,
-    fontWeight: "bold",
-  },
-  subtitle: {
-    fontSize: 36,
-    color: "#38434D",
   },
 });
