@@ -3,8 +3,8 @@ import { View } from "./Themed";
 import { useEffect, useState } from "react";
 
 const { width, height } = Dimensions.get("screen");
-const circleSize = Math.min(width, height) / 5.5;
-const radius = circleSize * 2.1;
+const circleSize = Math.min(width, height) / 7.0;
+const radius = Math.min(width, height) / 2.5;
 const apps = [
   { color: "#DE3373", link: "HeeJin" },
   { color: "#FCCA28", link: "HyunJin" },

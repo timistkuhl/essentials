@@ -16,14 +16,6 @@ const { width, height } = Dimensions.get("window");
 const LIGHT_SIZE = Math.min(width, height) * 2.5;
 
 export default function StartScreen() {
-  const [text, setText] = useState("");
-  const [count, setCount] = useState(0);
-
-  useEffect(() => {
-    if (count == 69) setText("Nice...");
-    else setText(" ");
-  }, [count]);
-
   return (
     <SafeAreaView style={styles.safeArea}>
       <Light
@@ -38,6 +30,7 @@ export default function StartScreen() {
       />
 
       <View style={styles.main}>
+        <View style={styles.clock} />
         <AppDrawer />
       </View>
     </SafeAreaView>
@@ -56,5 +49,12 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     padding: 24,
     zIndex: 1,
+  },
+  clock: {
+    width: width - 200,
+    height: width - 200,
+    borderRadius: 200,
+    borderColor: "gray",
+    borderWidth: 2,
   },
 });
