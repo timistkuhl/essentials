@@ -1,12 +1,13 @@
 import { Dimensions, Pressable, StyleSheet } from "react-native";
 import { View } from "./Themed";
 import { useEffect, useState } from "react";
+import { router } from "expo-router";
 
 const { width, height } = Dimensions.get("screen");
 const circleSize = Math.min(width, height) / 7.0;
 const radius = Math.min(width, height) / 2.5;
 const apps = [
-  { color: "#DE3373", link: "HeeJin" },
+  { color: "#DE3373", link: "/UnitConverter" },
   { color: "#FCCA28", link: "HyunJin" },
   { color: "#08A953", link: "HaSeul" },
   { color: "#F5712A", link: "YeoJin" },
@@ -52,7 +53,7 @@ export default function AppDrawer() {
                 radius * Math.sin((2 * Math.PI * (index + phi)) / apps.length),
             },
           ]}
-          onPress={() => alert("This is the color of " + link)}
+          onPress={() => router.navigate(link)}
         />
       ))}
     </View>
