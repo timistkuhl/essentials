@@ -1,5 +1,6 @@
 import AppDrawer from "@/components/AppDrawer";
 import Light from "@/components/Light";
+import { colorScheme } from "nativewind";
 import React from "react";
 import { useEffect, useState } from "react";
 import {
@@ -9,6 +10,8 @@ import {
   SafeAreaView,
   Button,
   Dimensions,
+  StatusBar,
+  Pressable,
 } from "react-native";
 
 const { width, height } = Dimensions.get("window");
@@ -16,6 +19,7 @@ const { width, height } = Dimensions.get("window");
 const LIGHT_SIZE = Math.min(width, height) * 2.5;
 
 export default function StartScreen() {
+
   return (
     <SafeAreaView style={styles.safeArea}>
       <Light
@@ -33,6 +37,8 @@ export default function StartScreen() {
         <View style={styles.clock} />
         <AppDrawer />
       </View>
+
+      
     </SafeAreaView>
   );
 }

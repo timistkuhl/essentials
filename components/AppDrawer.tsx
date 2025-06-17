@@ -9,7 +9,7 @@ const radius = Math.min(width, height) / 2.5;
 const apps = [
   { color: "#DE3373", link: "/UnitConverter" },
   { color: "#FCCA28", link: "HyunJin" },
-  { color: "#08A953", link: "HaSeul" },
+  { color: "#08A953", link: "/Calendar" },
   { color: "#F5712A", link: "YeoJin" },
   { color: "#F59EAF", link: "ViVi" },
   { color: "#EE1B3E", link: "Kim Lip" },

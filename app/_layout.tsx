@@ -1,20 +1,22 @@
-// app/_layout.tsx
-import React, { useEffect } from "react";
+import { PortalHost } from "@rn-primitives/portal";
+import * as NavigationBar from "expo-navigation-bar";
+import { Stack } from "expo-router/stack";
+import { setBackgroundColorAsync } from "expo-system-ui";
+import { colorScheme } from "nativewind";
+import React, { useEffect, useState } from "react";
 import {
   Dimensions,
   Platform,
-  StatusBar,
-  StyleSheet,
+  Pressable,
+  StatusBar, Text
 } from "react-native";
-import { View } from "@/components/Themed";
-import { setBackgroundColorAsync } from "expo-system-ui";
-import * as NavigationBar from "expo-navigation-bar";
-import { Stack } from "expo-router/stack";
-import "../global.css"
+import "../global.css";
 
 const { width, height } = Dimensions.get("window");
 
 export default function RootLayout() {
+  const [currentTheme, setCurrentTheme] = useState<"light" | "dark">("light");
+
   useEffect(() => {
     if (Platform.OS === "android") {
       NavigationBar.setVisibilityAsync("hidden").catch(console.error);
@@ -23,22 +25,30 @@ export default function RootLayout() {
     }
   }, []);
 
+  const toggleTheme = () => {
+    const newTheme = currentTheme === "light" ? "dark" : "light";
+    setCurrentTheme(newTheme);
+    colorScheme.set(newTheme);
+  };
+
   return (
-    <View style={styles.screen}>
-      <StatusBar
-        hidden
-        barStyle={"dark-content"}
-      />
+    <>
+      <StatusBar hidden barStyle={"dark-content"} />
+      <Pressable
+        onPress={toggleTheme}
+        className="absolute bottom-20 left-10 border-red-600 border-2 z-[2] p-0.5"
+      >
+        <Text
+          className={
+            currentTheme === "dark" ? "text-gray-100" : "text-gray-900"
+          }
+          style={{ fontSize: 16, fontWeight: "bold" }}
+        >
+          {currentTheme === "dark" ? "Dark" : "Light"}
+        </Text>
+      </Pressable>
       <Stack screenOptions={{ headerShown: false }} />
-    </View>
+      <PortalHost />
+    </>
   );
 }
-
-const styles = StyleSheet.create({
-  screen: {
-    flex: 1,
-    width: width,
-    height: height,
-    backgroundColor: "black",
-  },
-});
