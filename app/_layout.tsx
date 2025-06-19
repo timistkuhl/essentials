@@ -4,15 +4,10 @@ import { Stack } from "expo-router/stack";
 import { setBackgroundColorAsync } from "expo-system-ui";
 import { colorScheme } from "nativewind";
 import React, { useEffect, useState } from "react";
-import {
-  Dimensions,
-  Platform,
-  Pressable,
-  StatusBar, Text
-} from "react-native";
+import { Dimensions, Platform, Pressable, StatusBar, Text } from "react-native";
 import "../global.css";
-
-const { width, height } = Dimensions.get("window");
+import { ArrowLeft } from "lucide-react-native";
+import { router } from "expo-router";
 
 export default function RootLayout() {
   const [currentTheme, setCurrentTheme] = useState<"light" | "dark">("light");
@@ -36,7 +31,7 @@ export default function RootLayout() {
       <StatusBar hidden barStyle={"dark-content"} />
       <Pressable
         onPress={toggleTheme}
-        className="absolute bottom-20 left-10 border-red-600 border-2 z-[2] p-0.5"
+        className="absolute bottom-20 left-20 border-red-600 border-2 z-[2] p-0.5"
       >
         <Text
           className={
@@ -46,6 +41,12 @@ export default function RootLayout() {
         >
           {currentTheme === "dark" ? "Dark" : "Light"}
         </Text>
+      </Pressable>
+      <Pressable
+        onPress={router.back}
+        className="absolute bottom-16 left-6 z-[2] p-2"
+      >
+        <ArrowLeft color={"red"} size={40} strokeWidth={2.75}/>
       </Pressable>
       <Stack screenOptions={{ headerShown: false }} />
       <PortalHost />

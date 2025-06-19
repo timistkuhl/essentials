@@ -22,19 +22,19 @@ const apps = [
 ];
 
 export default function AppDrawer() {
-  const [phi, setPhi] = useState(0);
+  const [phi, setPhi] = useState(225); //maybe recorrect to 0
 
-  useEffect(() => {
-    let animationFrameId: number;
+  // useEffect(() => {
+  //   let animationFrameId: number;
 
-    const updatePhi = () => {
-      setPhi((prevPhi) => prevPhi + 0.005); // Adjust speed here
-      animationFrameId = requestAnimationFrame(updatePhi);
-    };
+  //   const updatePhi = () => {
+  //     setPhi((prevPhi) => prevPhi + 0.005); // Adjust speed here
+  //     animationFrameId = requestAnimationFrame(updatePhi);
+  //   };
 
-    animationFrameId = requestAnimationFrame(updatePhi);
-    return () => cancelAnimationFrame(animationFrameId);
-  }, []);
+  //   animationFrameId = requestAnimationFrame(updatePhi);
+  //   return () => cancelAnimationFrame(animationFrameId);
+  // }, []);
 
   return (
     <View style={styles.container}>
