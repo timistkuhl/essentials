@@ -18,6 +18,7 @@ export default function RootLayout() {
       NavigationBar.setBehaviorAsync("overlay-swipe").catch(console.error);
       setBackgroundColorAsync("black");
     }
+    setCurrentTheme("dark");
   }, []);
 
   const toggleTheme = () => {

@@ -1,9 +1,16 @@
 import CalendarDay from "@/components/CalendarDay";
 import { useSwipe } from "@/components/hooks/useSwipe";
-import { Separator } from "@/components/ui/separator";
 import Weekdays from "@/components/Weekdays";
 import React, { useEffect, useState } from "react";
-import { Dimensions, View, Text, ScrollView } from "react-native";
+import {
+  Dimensions,
+  Pressable,
+  ScrollView,
+  Text,
+  TouchableWithoutFeedback,
+  View,
+} from "react-native";
+import { logger } from "react-native-reanimated/lib/typescript/logger";
 
 // const [currentDate, setCurrentDate] = useState(new Date());
 //   console.log("Current Date:", currentDate);
@@ -24,17 +31,15 @@ const horizontalGap = (width - 20) / 7;
 export default function Calendar() {
   /////// Calendar Data ///////
   const [currentDate, setCurrentDate] = useState(new Date());
-  const [calendarData, setCalendarData] = useState({
-    prevDays: [] as number[],
-    days: [] as number[],
-    nextDays: [] as number[],
-  });
+  const [calendarData, setCalendarData] = useState<
+    {
+      Number: number;
+      Color: string;
+    }[]
+  >([]);
 
   function updateCalendar() {
-    const prevDays = [];
-    const days = [];
-    const nextDays = [];
-
+    let days = [];
     const year = currentDate.getFullYear();
     const month = currentDate.getMonth();
     const startOfMonth =
@@ -47,18 +52,22 @@ export default function Calendar() {
     const endDateOfPrevMonth = new Date(year, month, 0).getDate();
 
     for (let i = startOfMonth - 1; i > 0; i--) {
-      prevDays.push(endDateOfPrevMonth - i);
+      days.push({
+        Number: endDateOfPrevMonth - i,
+        Color: "text-muted-foreground",
+      });
     }
 
     for (let i = 1; i < lengthOfMonth + 1; i++) {
-      days.push(i);
+      days.push({ Number: i, Color: "" });
     }
 
-    for (let i = 1; i < 7 + 1 - ((prevDays.length + days.length) % 7); i++) {
-      nextDays.push(i);
+    const maxForCurrentDays = 7 + 1 - (days.length % 7);
+    for (let i = 1; i < maxForCurrentDays; i++) {
+      days.push({ Number: i, Color: "text-muted-foreground" });
     }
 
-    setCalendarData({ prevDays, days, nextDays });
+    setCalendarData(days);
   }
 
   useEffect(() => {
@@ -80,47 +89,51 @@ export default function Calendar() {
     );
   }
 
+  /////// Day Menu ///////
+  const [open, setOpen] = useState(false);
+  const [dayContent, setDayContent] = useState<number>();
+
+  function handleDayPress(index: number) {
+    setOpen(!open);
+    setDayContent(calendarData[index].Number);
+    
+  }
+
   return (
-    <ScrollView
-      className="flex-1 pl-5 pt-8 bg-background"
-      onTouchStart={onTouchStart}
-      onTouchEnd={onTouchEnd}
-    >
-      <Text className="text-foreground self-center my-5 bold text-3xl">
-        {currentDate.toLocaleDateString("de-DE", {
-          month: "long",
-          year: "numeric",
-        })}
-      </Text>
-      <Weekdays horizontalGap={horizontalGap} />
-      <View className="flex-row flex-wrap">
-        {calendarData.prevDays.map((day, index) => (
-          <CalendarDay
-            key={"prevdays" + index}
-            day={day}
-            verticalGap={verticalGap}
-            horizontalGap={horizontalGap}
-            className="text-muted-foreground"
-          />
-        ))}
-        {calendarData.days.map((day, index) => (
-          <CalendarDay
-            key={"days" + index}
-            day={day}
-            verticalGap={verticalGap}
-            horizontalGap={horizontalGap}
-          />
-        ))}
-        {calendarData.nextDays.map((day, index) => (
-          <CalendarDay
-            key={"nextdays" + index}
-            day={day}
-            verticalGap={verticalGap}
-            horizontalGap={horizontalGap}
-            className="text-muted-foreground"
-          />
-        ))}
+    <View className="flex-1 pl-5 pt-8 bg-background">
+      <TouchableWithoutFeedback onPress={() => setOpen(false)}>
+        <ScrollView onTouchStart={onTouchStart} onTouchEnd={onTouchEnd}>
+          <Pressable onPress={() => setCurrentDate(new Date())}>
+            {/* Temporary */}
+            <Text className="text-foreground self-center my-5 bold text-3xl">
+              {currentDate.toLocaleDateString("de-DE", {
+                month: "long",
+                year: "numeric",
+              })}
+            </Text>
+          </Pressable>
+          <Weekdays horizontalGap={horizontalGap} />
+
+          <View className="flex-row flex-wrap">
+            {calendarData.map(({ Number, Color }, index) => (
+              <Pressable
+                key={"day" + index}
+                className="active:opacity-50 active:border-2 active:border-secondary rounded-lg"
+                style={{
+                  height: verticalGap,
+                  width: horizontalGap,
+                }}
+                onPressIn={() => handleDayPress(index)}
+              >
+                <CalendarDay day={Number} className={Color} />
+              </Pressable>
+            ))}
+          </View>
+        </ScrollView>
+      </TouchableWithoutFeedback>
+      <View className="flex-1 items-center justify-center bottom-10 left-10 absolute border-2 border-red-600">
+        {open && <Text className="text-foreground">{dayContent}</Text>}
       </View>
-    </ScrollView>
+    </View>
   );
 }

@@ -18,7 +18,7 @@ const apps = [
   { color: "#7A0434", link: "Yves" },
   { color: "#F98F81", link: "Chuu" },
   { color: "#37BA9B", link: "GoWon" },
-  { color: "#C0C2C2", link: "Hyeju" },
+  { color: "#C0C2C2", link: "/test" },
 ];
 
 export default function AppDrawer() {
