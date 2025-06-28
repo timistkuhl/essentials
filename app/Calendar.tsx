@@ -96,44 +96,45 @@ export default function Calendar() {
   function handleDayPress(index: number) {
     setOpen(!open);
     setDayContent(calendarData[index].Number);
-    
   }
 
   return (
     <View className="flex-1 pl-5 pt-8 bg-background">
-      <TouchableWithoutFeedback onPress={() => setOpen(false)}>
-        <ScrollView onTouchStart={onTouchStart} onTouchEnd={onTouchEnd}>
-          <Pressable onPress={() => setCurrentDate(new Date())}>
-            {/* Temporary */}
-            <Text className="text-foreground self-center my-5 bold text-3xl">
-              {currentDate.toLocaleDateString("de-DE", {
-                month: "long",
-                year: "numeric",
-              })}
-            </Text>
-          </Pressable>
-          <Weekdays horizontalGap={horizontalGap} />
+      <ScrollView onTouchStart={onTouchStart} onTouchEnd={onTouchEnd}>
+        <Pressable onPress={() => setCurrentDate(new Date())}>
+          {/* Temporary */}
+          <Text className="text-foreground self-center my-5 bold text-3xl">
+            {currentDate.toLocaleDateString("de-DE", {
+              month: "long",
+              year: "numeric",
+            })}
+          </Text>
+        </Pressable>
+        <Weekdays horizontalGap={horizontalGap} />
 
-          <View className="flex-row flex-wrap">
-            {calendarData.map(({ Number, Color }, index) => (
-              <Pressable
-                key={"day" + index}
-                className="active:opacity-50 active:border-2 active:border-secondary rounded-lg"
-                style={{
-                  height: verticalGap,
-                  width: horizontalGap,
-                }}
-                onPressIn={() => handleDayPress(index)}
-              >
-                <CalendarDay day={Number} className={Color} />
-              </Pressable>
-            ))}
+        <View className="flex-row flex-wrap">
+          {calendarData.map(({ Number, Color }, index) => (
+            <Pressable
+              key={"day" + index}
+              className="active:opacity-50 active:border-2 active:border-secondary rounded-lg"
+              style={{
+                height: verticalGap,
+                width: horizontalGap,
+              }}
+              onPress={() => handleDayPress(index)}
+            >
+              <CalendarDay day={Number} className={Color} />
+            </Pressable>
+          ))}
+        </View>
+      </ScrollView>
+      {open && (
+        <TouchableWithoutFeedback onPress={() => setOpen(false)}>
+          <View className="flex-1 items-center justify-center bottom-0 left-0 w-screen h-4/5 absolute bg-[#CFF0CC] z-10 rounded-t-3xl">
+            <Text className="text-red-600">{dayContent} "Hallo"</Text>
           </View>
-        </ScrollView>
-      </TouchableWithoutFeedback>
-      <View className="flex-1 items-center justify-center bottom-10 left-10 absolute border-2 border-red-600">
-        {open && <Text className="text-foreground">{dayContent}</Text>}
-      </View>
+        </TouchableWithoutFeedback>
+      )}
     </View>
   );
 }
