@@ -1,16 +1,9 @@
 import CalendarDay from "@/components/CalendarDay";
 import { useSwipe } from "@/components/hooks/useSwipe";
 import Weekdays from "@/components/Weekdays";
+import { Plus } from "lucide-react-native";
 import React, { useEffect, useState } from "react";
-import {
-  Dimensions,
-  Pressable,
-  ScrollView,
-  Text,
-  TouchableWithoutFeedback,
-  View,
-} from "react-native";
-import { logger } from "react-native-reanimated/lib/typescript/logger";
+import { Dimensions, Pressable, ScrollView, Text, View } from "react-native";
 
 // const [currentDate, setCurrentDate] = useState(new Date());
 //   console.log("Current Date:", currentDate);
@@ -38,10 +31,11 @@ export default function Calendar() {
     }[]
   >([]);
 
+  const year = currentDate.getFullYear();
+  const month = currentDate.getMonth();
+
   function updateCalendar() {
     let days = [];
-    const year = currentDate.getFullYear();
-    const month = currentDate.getMonth();
     const startOfMonth =
       new Date(year, month, 1).getDay() === 0
         ? 7
@@ -91,11 +85,11 @@ export default function Calendar() {
 
   /////// Day Menu ///////
   const [open, setOpen] = useState(false);
-  const [dayContent, setDayContent] = useState<number>();
+  const [dayContent, setDayContent] = useState(new Date());
 
   function handleDayPress(index: number) {
     setOpen(!open);
-    setDayContent(calendarData[index].Number);
+    setDayContent(new Date(year, month, calendarData[index].Number));
   }
 
   return (
@@ -129,11 +123,29 @@ export default function Calendar() {
         </View>
       </ScrollView>
       {open && (
-        <TouchableWithoutFeedback onPress={() => setOpen(false)}>
-          <View className="flex-1 items-center justify-center bottom-0 left-0 w-screen h-4/5 absolute bg-[#CFF0CC] z-10 rounded-t-3xl">
-            <Text className="text-red-600">{dayContent} "Hallo"</Text>
+        <View className="w-screen h-full absolute z-10 flex-row flex-wrap">
+          <Pressable
+            className="border-red-600 border-2 w-screen h-1/5"
+            onPress={() => setOpen(false)}
+          />
+          <View className="flex w-full h-4/5 bg-background rounded-t-3xl border-2 flex-shrink mx-2 px-4 pt-4 items-center border-b-0 border-secondary">
+            <View className="flex flex-row items-center justify-center w-full relative">
+              <Text className="text-foreground text-2xl">
+                {dayContent.toLocaleDateString("de-DE", {
+                  month: "long",
+                  day: "numeric",
+                  weekday: "long",
+                })}
+              </Text>
+              <Pressable
+                className="absolute right-0 flex items-center justify-center p-2"
+                onPress={() => null}
+              >
+                <Plus color={"#FF0000"} strokeWidth={3} size={32} />
+              </Pressable>
+            </View>
           </View>
-        </TouchableWithoutFeedback>
+        </View>
       )}
     </View>
   );
