@@ -31,6 +31,10 @@ export default function Calendar() {
     }[]
   >([]);
 
+  // useEffect(() => {
+  //   setCurrentDate(dayContent)
+  // }, [dayContent]);
+
   const year = currentDate.getFullYear();
   const month = currentDate.getMonth();
 
@@ -68,10 +72,36 @@ export default function Calendar() {
     updateCalendar();
   }, [currentDate]);
 
-  /////// Change Monnth on Swipe ///////
-  const { onTouchStart, onTouchEnd } = useSwipe(onSwipeLeft, onSwipeRight, 6);
+  /////// Day Menu ///////
+  const [open, setOpen] = useState(false);
+
+  function handleDayPress(index: number) {
+    setOpen(!open);
+    setCurrentDate(new Date(year, month, calendarData[index].Number));
+  }
+
+  /////// Change on Swipe ///////
+  const {
+    onTouchStart: onTouchStartHorizontal,
+    onTouchEnd: onTouchEndHorizontal,
+  } = useSwipe(onSwipeLeft, onSwipeRight, 6);
+
+  const { onTouchStart: onTouchStartVertical, onTouchEnd: onTouchEndVertical } =
+    useSwipe(onSwipeUp, onSwipeDown, 6);
 
   function onSwipeLeft() {
+    console.log("Swipe Left");
+
+    if (open) {
+      setCurrentDate(
+        new Date(
+          currentDate.getFullYear(),
+          currentDate.getMonth() - 1,
+          currentDate.getDate() + 1
+        )
+      );
+    }
+
     setCurrentDate(
       new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 1)
     );
@@ -83,20 +113,21 @@ export default function Calendar() {
     );
   }
 
-  /////// Day Menu ///////
-  const [open, setOpen] = useState(false);
-  const [dayContent, setDayContent] = useState(new Date());
+  function onSwipeUp() {
+    setOpen(false);
+  }
 
-  function handleDayPress(index: number) {
-    setOpen(!open);
-    setDayContent(new Date(year, month, calendarData[index].Number));
+  function onSwipeDown() {
+    setOpen(false);
   }
 
   return (
     <View className="flex-1 pl-5 pt-8 bg-background">
-      <ScrollView onTouchStart={onTouchStart} onTouchEnd={onTouchEnd}>
+      <ScrollView
+        onTouchStart={onTouchStartHorizontal}
+        onTouchEnd={onTouchEndHorizontal}
+      >
         <Pressable onPress={() => setCurrentDate(new Date())}>
-          {/* Temporary */}
           <Text className="text-foreground self-center my-5 bold text-3xl">
             {currentDate.toLocaleDateString("de-DE", {
               month: "long",
@@ -105,7 +136,6 @@ export default function Calendar() {
           </Text>
         </Pressable>
         <Weekdays horizontalGap={horizontalGap} />
-
         <View className="flex-row flex-wrap">
           {calendarData.map(({ Number, Color }, index) => (
             <Pressable
@@ -122,16 +152,21 @@ export default function Calendar() {
           ))}
         </View>
       </ScrollView>
+
       {open && (
-        <View className="w-screen h-full absolute z-10 flex-row flex-wrap">
+        <ScrollView
+          onTouchStart={onTouchStartVertical}
+          onTouchEnd={onTouchEndVertical}
+          className="w-screen h-full absolute z-10 flex-row flex-wrap"
+        >
           <Pressable
             className="border-red-600 border-2 w-screen h-1/5"
             onPress={() => setOpen(false)}
           />
-          <View className="flex w-full h-4/5 bg-background rounded-t-3xl border-2 flex-shrink mx-2 px-4 pt-4 items-center border-b-0 border-secondary">
+          <View className="flex w-fit h-4/5 bg-background rounded-t-3xl border-2 flex-shrink mx-2 px-4 pt-4 items-center border-b-0 border-secondary">
             <View className="flex flex-row items-center justify-center w-full relative">
               <Text className="text-foreground text-2xl">
-                {dayContent.toLocaleDateString("de-DE", {
+                {currentDate.toLocaleDateString("de-DE", {
                   month: "long",
                   day: "numeric",
                   weekday: "long",
@@ -145,7 +180,7 @@ export default function Calendar() {
               </Pressable>
             </View>
           </View>
-        </View>
+        </ScrollView>
       )}
     </View>
   );
