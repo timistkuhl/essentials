@@ -1,24 +1,25 @@
-import { Dimensions, Pressable, StyleSheet } from "react-native";
+import { Dimensions, Pressable, StyleSheet, Text } from "react-native";
 import { View } from "./Themed";
 import { useEffect, useState } from "react";
 import { router } from "expo-router";
+import { ArrowRightLeft, Calculator, CalendarDays, CircleGauge, CloudSunRain, FileCode, Pencil, UserRoundSearch } from "lucide-react-native";
 
 const { width, height } = Dimensions.get("screen");
 const circleSize = Math.min(width, height) / 7.0;
 const radius = Math.min(width, height) / 2.5;
 const apps = [
-  { color: "#DE3373", link: "/UnitConverter" },
-  { color: "#FCCA28", link: "HyunJin" },
-  { color: "#08A953", link: "/Calendar" },
-  { color: "#F5712A", link: "YeoJin" },
-  { color: "#F59EAF", link: "ViVi" },
-  { color: "#EE1B3E", link: "Kim Lip" },
-  { color: "#1E76B8", link: "JinSoul" },
-  { color: "#7C2E87", link: "Choerry" },
-  { color: "#7A0434", link: "Yves" },
-  { color: "#F98F81", link: "Chuu" },
-  { color: "#37BA9B", link: "GoWon" },
-  { color: "#C0C2C2", link: "/test" },
+  { color: "#DE3373", icon: <ArrowRightLeft />, link: "/UnitConverter" },
+  { color: "#FCCA28", icon: <Pencil />, link: "/NotesOverview" },
+  { color: "#08A953", icon: <CalendarDays />, link: "/Calendar" },
+  { color: "#F5712A", icon: <Calculator />, link: "/Calculator" },
+  { color: "#F59EAF", icon: "", link: "ViVi" },
+  { color: "#EE1B3E", icon: "", link: "Kim Lip" },
+  { color: "#1E76B8", icon: <CloudSunRain />, link: "/Weather" },
+  { color: "#7C2E87", icon: <UserRoundSearch />, link: "/Ai" },
+  { color: "#7A0434", icon: <CircleGauge/>, link: "/PhoneSensors" },
+  { color: "#F98F81", icon: "", link: "Chuu" },
+  { color: "#37BA9B", icon: "", link: "GoWon" },
+  { color: "#C0C2C2", icon: <FileCode />, link: "/test" },
 ];
 
 export default function AppDrawer() {
@@ -38,9 +39,10 @@ export default function AppDrawer() {
 
   return (
     <View style={styles.container}>
-      {apps.map(({ color, link }, index) => (
+      {apps.map(({ color, icon, link }, index) => (
         <Pressable
           key={color}
+          className="justify-center items-center"
           style={[
             styles.circle,
             {
@@ -54,7 +56,9 @@ export default function AppDrawer() {
             },
           ]}
           onPress={() => router.navigate(link)}
-        />
+        >
+          {icon}
+        </Pressable>
       ))}
     </View>
   );
